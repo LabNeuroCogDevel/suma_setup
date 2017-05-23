@@ -64,11 +64,21 @@ go_to_right() {
   DriveSuma -echo_edu  -com  recorder_cont -save_as ${1}right_lat.jpg 
 }
 
+recordimg() {
+  name=$1
+  [ -z "$name" ] && name=sumashot
+  DriveSuma -echo_edu  -com  recorder_cont -save_as ${name}.jpg 
+}
 
-
-launch_both(){
-   suma -niml -spec $specFile -sv $t1 &
-   afni  -niml -yesplugouts -dset $t1 $mnit1 $(find -maxdepth 1 -type f -iname '*HEAD' -or -iname '*.nii*') &
+afnimni() {
+   afni  -niml -yesplugouts -dset $t1 $mnit1 $(find -maxdepth 1 -type f -iname '*HEAD' -or -iname '*.nii*') /opt/ni_tools/standard_templates/fsl_mni152/MNI152_T1_3mm.nii
+}
+sumamni() {
+   suma -niml -spec $specFile -sv $t1 
+}
+launch_both() {
+ afnimni &
+ sumamni &
 }
 
 make_black_alpha() {
